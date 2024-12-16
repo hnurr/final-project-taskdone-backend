@@ -39,6 +39,8 @@ public class User {
     private Boolean isCompony;
     private String companyName;
     private String serviceArea;
+    private Boolean isApproved;
+
 
 
 

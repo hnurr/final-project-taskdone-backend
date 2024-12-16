@@ -60,5 +60,8 @@ public class UserService {
     }
 
 
+    public List<User> getApprovedProviders() {
+        return userRepository.findByRoleAndStatus();
+    }
 }
 

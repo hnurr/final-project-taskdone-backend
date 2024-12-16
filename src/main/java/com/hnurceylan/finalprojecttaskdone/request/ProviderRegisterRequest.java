@@ -1,5 +1,6 @@
 package com.hnurceylan.finalprojecttaskdone.request;
 
+
 import lombok.Data;
 
 @Data
@@ -17,4 +18,6 @@ public class ProviderRegisterRequest {
     private Boolean isCompony;
     private String companyName;
     private String serviceArea;
+    private Boolean isApproved;
+
 }

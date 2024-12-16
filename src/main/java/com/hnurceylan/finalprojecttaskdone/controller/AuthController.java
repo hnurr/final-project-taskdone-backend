@@ -45,20 +45,46 @@ public class AuthController {
         return ResponseEntity.ok(Collections.singletonMap("message", "Kayıt başarılı!"));
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest) {
+//        User existingUser = userService.findByEmail(loginRequest.getEmail());
+//        if (existingUser == null || !existingUser.getPassword().equals(loginRequest.getPassword())) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(Collections.singletonMap("message", "Geçersiz email veya şifre!"));
+//        }
+//
+//        Map<String, String> response = new HashMap<>();
+//        response.put("message", "Giriş başarılı!");
+//       response.put("role", existingUser.getRole().name()); // Rol bilgisini de ekliyoruz
+//
+//        return ResponseEntity.ok(response);
+//    }
+
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest) {
+        // Kullanıcıyı email ile bul
         User existingUser = userService.findByEmail(loginRequest.getEmail());
+
+        // Kullanıcı yoksa veya şifre uyuşmuyorsa hata döndür
         if (existingUser == null || !existingUser.getPassword().equals(loginRequest.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("message", "Geçersiz email veya şifre!"));
         }
 
+        // Eğer kullanıcı PROVIDER ise ve onaylanmamışsa hata döndür
+        if (existingUser.getRole() == Role.PROVIDER && !Boolean.TRUE.equals(existingUser.getIsApproved())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Collections.singletonMap("message", "Hesabınız henüz onaylanmamış! Lütfen adminin onayını bekleyin."));
+        }
+
+        // Giriş başarılı, kullanıcı bilgilerini döndür
         Map<String, String> response = new HashMap<>();
         response.put("message", "Giriş başarılı!");
-       response.put("role", existingUser.getRole().name()); // Rol bilgisini de ekliyoruz
-
+        response.put("role", existingUser.getRole().name()); // Kullanıcının rolü
         return ResponseEntity.ok(response);
     }
+
 
 
 //    @PostMapping("/register/admin")
@@ -148,10 +174,12 @@ public class AuthController {
             provider.setSurname(providerRegisterRequest.getSurname());
             provider.setName(providerRegisterRequest.getName());
             provider.setRole(Role.PROVIDER);
+            provider.setIsApproved(false);
+
 
             // Admin kaydını kaydet
             userRepository.save(provider);
-            return ResponseEntity.ok("Provider registered successfully");
+            return ResponseEntity.ok("Provider registered successfully,Approval awaited.");
         } catch (Exception e) {
             // Konsolda hatayı gör
             e.printStackTrace();

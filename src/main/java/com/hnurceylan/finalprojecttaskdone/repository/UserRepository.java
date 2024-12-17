@@ -18,6 +18,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query("SELECT u FROM User u WHERE u.role = 'provider' AND u.isApproved = true")
     List<User> findByRoleAndStatus();
 
-
-
+    @Query("SELECT c FROM User c WHERE c.role='customer'")
+    List<User> findAllRoleCustomer();
 }

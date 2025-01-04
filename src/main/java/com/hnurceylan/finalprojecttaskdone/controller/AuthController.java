@@ -5,6 +5,7 @@ import com.hnurceylan.finalprojecttaskdone.enums.Role;
 import com.hnurceylan.finalprojecttaskdone.repository.UserRepository;
 import com.hnurceylan.finalprojecttaskdone.request.ProviderRegisterRequest;
 import com.hnurceylan.finalprojecttaskdone.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +63,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody User loginRequest, HttpSession session) {
         // Kullanıcıyı email ile bul
         User existingUser = userService.findByEmail(loginRequest.getEmail());
 
@@ -78,12 +79,17 @@ public class AuthController {
                     .body(Collections.singletonMap("message", "Hesabınız henüz onaylanmamış! Lütfen adminin onayını bekleyin."));
         }
 
-        // Giriş başarılı, kullanıcı bilgilerini döndür
+        // Giriş başarılı, session'a kullanıcı bilgilerini kaydet
+        session.setAttribute("userId", existingUser.getId());  // Kullanıcının ID'sini oturuma kaydet
+
+        // Yanıtı oluştur
         Map<String, String> response = new HashMap<>();
         response.put("message", "Giriş başarılı!");
         response.put("role", existingUser.getRole().name()); // Kullanıcının rolü
+        response.put("id" ,String.valueOf(existingUser.getId()));
         return ResponseEntity.ok(response);
     }
+
 
 
 

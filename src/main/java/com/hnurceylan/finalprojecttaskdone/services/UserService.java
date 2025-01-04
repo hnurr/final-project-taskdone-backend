@@ -3,6 +3,7 @@ package com.hnurceylan.finalprojecttaskdone.services;
 
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 
@@ -32,24 +33,20 @@ public class UserService {
     }
 
     public User updateOneUser(Long userId, User newUser) {
+        // Mevcut kullanıcıyı ID'ye göre buluyoruz
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Optional<User> user = userRepository.findById(userId);
+        // Mevcut kullanıcı verilerini güncelliyoruz
+        existingUser.setName(newUser.getName());
+        existingUser.setPhoneNumber(newUser.getPhoneNumber());
+        existingUser.setCity(newUser.getCity());
+        existingUser.setDistrict(newUser.getDistrict());
+        existingUser.setNeighborhood(newUser.getNeighborhood());
+        existingUser.setDescription(newUser.getDescription());
 
-        if (user.isPresent()) {
-
-            User foundUser = user.get();
-            foundUser.setEmail(newUser.getEmail());
-            foundUser.setPassword(newUser.getPassword());
-
-            userRepository.save(foundUser);
-        }
-        return null;
-
-    }
-
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-
+        // Güncellenmiş kullanıcıyı veritabanına kaydediyoruz
+        return userRepository.save(existingUser);
     }
 
 
@@ -62,6 +59,9 @@ public class UserService {
 
     public List<User> getApprovedProviders() {
         return userRepository.findByRoleAndStatus();
+    }
+
+    public void deleteById(Long userId) {
     }
 }
 

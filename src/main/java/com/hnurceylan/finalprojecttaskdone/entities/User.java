@@ -40,6 +40,8 @@ public class User {
     private String companyName;
     private String serviceArea;
     private Boolean isApproved;
+    private String description;
+
 
 
 

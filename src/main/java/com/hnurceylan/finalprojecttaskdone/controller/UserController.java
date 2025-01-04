@@ -4,6 +4,9 @@ package com.hnurceylan.finalprojecttaskdone.controller;
 
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.services.UserService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserController {
 
 
@@ -39,11 +43,19 @@ public class UserController {
 
     }
 
-    @PutMapping("/{userId}")
-    public User updateOneUser(@PathVariable Long userId, @RequestBody User newUser) {
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<String> updateProfile(@RequestBody User updatedUser, @PathVariable Long userId) {
+        //Long userId = (Long) session.getAttribute("userId");
 
-        return userService.updateOneUser(userId, newUser);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Güncelleme için giriş yapmanız gerekiyor!");
+        }
+
+        userService.updateOneUser(userId, updatedUser);
+        return ResponseEntity.ok("Profil başarıyla güncellendi!");
     }
+
+
 
 
     @DeleteMapping("/{userId}")

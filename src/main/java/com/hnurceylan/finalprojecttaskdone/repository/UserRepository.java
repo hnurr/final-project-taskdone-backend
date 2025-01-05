@@ -1,5 +1,6 @@
 package com.hnurceylan.finalprojecttaskdone.repository;
 
+import com.hnurceylan.finalprojecttaskdone.dto.ProviderCreateProfileDto;
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.enums.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,4 +24,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
     List<User> findAllRoleCustomer();
 
     Optional<User> findById(Long userId);
+
+    @Query("SELECT u FROM User u WHERE u.role = 'PROVIDER' AND u.isApproved = true")
+    List<User> findAllByRoleAndIsApproved(String role, Boolean isApproved);
+
 }

@@ -1,6 +1,7 @@
 package com.hnurceylan.finalprojecttaskdone.services;
 
 
+import com.hnurceylan.finalprojecttaskdone.dto.ProviderCreateProfileDto;
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -63,5 +64,31 @@ public class UserService {
 
     public void deleteById(Long userId) {
     }
-}
+
+    public List<ProviderCreateProfileDto> getAllServiceProviders() {
+
+        List<User> users = userRepository.findAllByRoleAndIsApproved("PROVIDER", true);
+
+        // Kullanıcıları DTO'ya dönüştürerek dinamik response oluşturuyoruz
+        return users.stream().map(user -> {
+            ProviderCreateProfileDto response = new ProviderCreateProfileDto();
+            response.setName(user.getName());
+            response.setSurname(user.getSurname());
+            response.setCity(user.getCity());
+            response.setDistrict(user.getDistrict());
+            response.setNeighborhood(user.getNeighborhood());
+            response.setDescription(user.getDescription());
+            response.setPhoneNumber(user.getPhoneNumber());
+            response.setServiceArea(user.getServiceArea());
+
+            // Eğer şirketse, şirket adını dahil et
+            if (Boolean.TRUE.equals(user.getIsCompony())) {
+                response.setCompanyName(user.getCompanyName());
+            }
+
+            return response;
+        }).toList();
+    }
+    }
+
 

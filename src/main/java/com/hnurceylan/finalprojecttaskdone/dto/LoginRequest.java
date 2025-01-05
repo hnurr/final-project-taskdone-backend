@@ -1,7 +1,6 @@
-package com.hnurceylan.finalprojecttaskdone.request;
+package com.hnurceylan.finalprojecttaskdone.dto;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

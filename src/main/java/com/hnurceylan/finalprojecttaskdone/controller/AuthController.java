@@ -3,7 +3,7 @@ package com.hnurceylan.finalprojecttaskdone.controller;
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.enums.Role;
 import com.hnurceylan.finalprojecttaskdone.repository.UserRepository;
-import com.hnurceylan.finalprojecttaskdone.request.ProviderRegisterRequest;
+import com.hnurceylan.finalprojecttaskdone.dto.ProviderRegisterRequest;
 import com.hnurceylan.finalprojecttaskdone.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,6 +2,7 @@ package com.hnurceylan.finalprojecttaskdone.controller;
 
 
 
+import com.hnurceylan.finalprojecttaskdone.dto.ProviderCreateProfileDto;
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.services.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +31,9 @@ public class UserController {
         return userService.getAllUsers() ;
     }
 
+
+
+
     @GetMapping("/{userId}")
     public User getOneUser(@PathVariable Long userId) {
         //exceptionn
@@ -55,6 +59,11 @@ public class UserController {
         return ResponseEntity.ok("Profil başarıyla güncellendi!");
     }
 
+    @GetMapping("/service-providers")
+    public ResponseEntity<List<ProviderCreateProfileDto>> getServiceProviders() {
+        List<ProviderCreateProfileDto> serviceProviders = userService.getAllServiceProviders();
+        return ResponseEntity.ok(serviceProviders);
+    }
 
 
 

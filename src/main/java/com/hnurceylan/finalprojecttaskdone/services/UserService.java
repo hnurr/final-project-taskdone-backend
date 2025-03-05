@@ -72,6 +72,7 @@ public class UserService {
         // Kullanıcıları DTO'ya dönüştürerek dinamik response oluşturuyoruz
         return users.stream().map(user -> {
             ProviderCreateProfileDto response = new ProviderCreateProfileDto();
+            response.setId(user.getId());
             response.setName(user.getName());
             response.setSurname(user.getSurname());
             response.setCity(user.getCity());

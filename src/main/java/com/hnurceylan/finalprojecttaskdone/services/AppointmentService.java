@@ -33,7 +33,7 @@ public class AppointmentService {
 
         // Randevuyu kontrol et
         Optional<Appointment> existingAppointment = appointmentRepository.findAppointmentByDateAndTime(
-                appointmentDto.getAppointmentDate().toLocalDate(), appointmentDto.getAppointmentTime());
+                appointmentDto.getAppointmentDate().toLocalDate(), appointmentDto.getAppointmentDate().toLocalTime());
 
         if (existingAppointment.isPresent()) {
             throw new RuntimeException("Appointment time is already booked.");
@@ -44,7 +44,7 @@ public class AppointmentService {
         appointment.setUser(user);
         appointment.setProvider(provider);
         appointment.setAppointmentDate(appointmentDto.getAppointmentDate().toLocalDate());
-        appointment.setAppointmentTime(appointmentDto.getAppointmentTime());
+        appointment.setAppointmentTime(appointmentDto.getAppointmentDate().toLocalTime());
         appointment.setUserFirstName(appointmentDto.getUserFirstName());
         appointment.setUserLastName(appointmentDto.getUserLastName());
         appointment.setUserPhoneNumber(appointmentDto.getUserPhoneNumber());

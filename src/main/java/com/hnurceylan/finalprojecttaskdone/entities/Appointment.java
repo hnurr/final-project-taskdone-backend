@@ -1,5 +1,6 @@
 package com.hnurceylan.finalprojecttaskdone.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,10 +19,12 @@ public class Appointment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user; // Randevuyu alacak kullanıcı (USER)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_id")
+    @JsonBackReference
     private User provider; // Randevuyu veren sağlayıcı (PROVIDER)
 
     private LocalDate appointmentDate;

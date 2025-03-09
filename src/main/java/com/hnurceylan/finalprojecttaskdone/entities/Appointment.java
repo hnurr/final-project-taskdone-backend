@@ -2,6 +2,7 @@ package com.hnurceylan.finalprojecttaskdone.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hnurceylan.finalprojecttaskdone.enums.AppointmentStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,5 +38,10 @@ public class Appointment {
     private String userFirstName; // Kullanıcının adı
     private String userLastName;  // Kullanıcının soyadı
     private String userPhoneNumber; // Kullanıcının telefon n
+
+
+
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
 }

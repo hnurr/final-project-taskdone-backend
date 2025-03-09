@@ -4,6 +4,7 @@ import com.hnurceylan.finalprojecttaskdone.dto.AppointmentDto;
 import com.hnurceylan.finalprojecttaskdone.dto.AppointmentUserDto;
 import com.hnurceylan.finalprojecttaskdone.entities.Appointment;
 import com.hnurceylan.finalprojecttaskdone.entities.User;
+import com.hnurceylan.finalprojecttaskdone.enums.AppointmentStatus;
 import com.hnurceylan.finalprojecttaskdone.repository.AppointmentRepository;
 import com.hnurceylan.finalprojecttaskdone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,13 +53,15 @@ public class AppointmentService {
         appointment.setUserLastName(appointmentDto.getUserLastName());
         appointment.setUserPhoneNumber(appointmentDto.getUserPhoneNumber());
 
+
+        appointment.setStatus(AppointmentStatus.BEKLEMEDE);
         // Randevu veritabanına kaydediliyor
         return appointmentRepository.save(appointment);
     }
 
     // providerId'ye göre randevuları döndüren metod
     public List<Appointment> getAppointmentsByProviderId(Long providerId) {
-        return appointmentRepository.findByProviderId(providerId);
+        return appointmentRepository.findByProviderIdAndStatus(providerId, AppointmentStatus.BEKLEMEDE);
     }
 
 
@@ -75,6 +78,23 @@ public class AppointmentService {
                 appointment.getProvider().getServiceArea(),
                 appointment.getProvider().getCity() + ", " + appointment.getProvider().getDistrict() + ", " + appointment.getProvider().getNeighborhood()
         )).collect(Collectors.toList());
+    }
+
+    // Randevu durumunu güncelleme metodu
+    public void updateAppointmentStatus(Long appointmentId, AppointmentStatus status) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+        // Durum sadece BEKLEMEDE olan randevular için değiştirilebilir
+        if (appointment.getStatus() != AppointmentStatus.BEKLEMEDE) {
+            throw new RuntimeException("Appointment must be in 'BEKLEMEDE' status to approve or reject.");
+        }
+
+        // Durumu güncelle
+        appointment.setStatus(status);
+
+        // Güncellenmiş randevuyu kaydet
+        appointmentRepository.save(appointment);
     }
 
 

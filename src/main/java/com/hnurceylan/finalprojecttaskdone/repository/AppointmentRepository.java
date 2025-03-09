@@ -1,6 +1,7 @@
 package com.hnurceylan.finalprojecttaskdone.repository;
 
 import com.hnurceylan.finalprojecttaskdone.entities.Appointment;
+import com.hnurceylan.finalprojecttaskdone.enums.AppointmentStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     List<Appointment> findByProviderId(Long providerId);
 
     List<Appointment> findByUserId(Long userId);
+
+    List<Appointment> findByProviderIdAndStatus(Long providerId, AppointmentStatus status);
 }

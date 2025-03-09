@@ -3,6 +3,7 @@ package com.hnurceylan.finalprojecttaskdone.controller;
 import com.hnurceylan.finalprojecttaskdone.dto.AppointmentDto;
 import com.hnurceylan.finalprojecttaskdone.dto.AppointmentUserDto;
 import com.hnurceylan.finalprojecttaskdone.entities.Appointment;
+import com.hnurceylan.finalprojecttaskdone.enums.AppointmentStatus;
 import com.hnurceylan.finalprojecttaskdone.error.AppointmentError;
 import com.hnurceylan.finalprojecttaskdone.services.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +58,28 @@ public class AppointmentController {
     public ResponseEntity<List<AppointmentUserDto>> getAppointmentsByUserId(@PathVariable Long userId) {
         List<AppointmentUserDto> appointments = appointmentService.getAppointmentsByUserId(userId);
         return ResponseEntity.ok(appointments);
+    }
+
+    // Randevuyu onaylamak için endpoint
+    @PutMapping("/{appointmentId}/approve")
+    public ResponseEntity<String> approveAppointment(@PathVariable Long appointmentId) {
+        try {
+            appointmentService.updateAppointmentStatus(appointmentId, AppointmentStatus.ONAYLANDI);
+            return ResponseEntity.ok("Appointment approved successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body("Error approving appointment: " + e.getMessage());
+        }
+    }
+
+    // Randevuyu reddetmek için endpoint
+    @PutMapping("/{appointmentId}/reject")
+    public ResponseEntity<String> rejectAppointment(@PathVariable Long appointmentId) {
+        try {
+            appointmentService.updateAppointmentStatus(appointmentId, AppointmentStatus.REDDEDILDI);
+            return ResponseEntity.ok("Appointment rejected successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(400).body("Error rejecting appointment: " + e.getMessage());
+        }
     }
 }
 

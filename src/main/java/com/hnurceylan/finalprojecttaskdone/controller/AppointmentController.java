@@ -1,6 +1,7 @@
 package com.hnurceylan.finalprojecttaskdone.controller;
 
 import com.hnurceylan.finalprojecttaskdone.dto.AppointmentDto;
+import com.hnurceylan.finalprojecttaskdone.dto.AppointmentUserDto;
 import com.hnurceylan.finalprojecttaskdone.entities.Appointment;
 import com.hnurceylan.finalprojecttaskdone.error.AppointmentError;
 import com.hnurceylan.finalprojecttaskdone.services.AppointmentService;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/appointments")
@@ -41,6 +44,19 @@ public class AppointmentController {
             // Hata durumunda ErrorResponse dönme
             return new ResponseEntity<>(new AppointmentError("Failed to create appointment: " + e.getMessage()), HttpStatus.BAD_REQUEST);
         }
+    }
+
+
+    // providerId'ye göre randevuları almak için bir endpoint
+    @GetMapping("/provider/{providerId}")
+    public List<Appointment> getAppointmentsByProviderId(@PathVariable Long providerId) {
+        return appointmentService.getAppointmentsByProviderId(providerId);
+    }
+
+    @GetMapping("/customer/{userId}")
+    public ResponseEntity<List<AppointmentUserDto>> getAppointmentsByUserId(@PathVariable Long userId) {
+        List<AppointmentUserDto> appointments = appointmentService.getAppointmentsByUserId(userId);
+        return ResponseEntity.ok(appointments);
     }
 }
 

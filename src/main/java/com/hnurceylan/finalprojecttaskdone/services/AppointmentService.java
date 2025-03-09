@@ -1,6 +1,7 @@
 package com.hnurceylan.finalprojecttaskdone.services;
 
 import com.hnurceylan.finalprojecttaskdone.dto.AppointmentDto;
+import com.hnurceylan.finalprojecttaskdone.dto.AppointmentUserDto;
 import com.hnurceylan.finalprojecttaskdone.entities.Appointment;
 import com.hnurceylan.finalprojecttaskdone.entities.User;
 import com.hnurceylan.finalprojecttaskdone.repository.AppointmentRepository;
@@ -8,7 +9,9 @@ import com.hnurceylan.finalprojecttaskdone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AppointmentService {
@@ -51,6 +54,27 @@ public class AppointmentService {
 
         // Randevu veritabanına kaydediliyor
         return appointmentRepository.save(appointment);
+    }
+
+    // providerId'ye göre randevuları döndüren metod
+    public List<Appointment> getAppointmentsByProviderId(Long providerId) {
+        return appointmentRepository.findByProviderId(providerId);
+    }
+
+
+
+    public List<AppointmentUserDto> getAppointmentsByUserId(Long userId) {
+        List<Appointment> appointments = appointmentRepository.findByUserId(userId);
+
+        return appointments.stream().map(appointment -> new AppointmentUserDto(
+                appointment.getId(),
+                appointment.getAppointmentDate(),
+                appointment.getAppointmentTime(),
+                appointment.getProvider().getName(),
+                appointment.getProvider().getSurname(),
+                appointment.getProvider().getServiceArea(),
+                appointment.getProvider().getCity() + ", " + appointment.getProvider().getDistrict() + ", " + appointment.getProvider().getNeighborhood()
+        )).collect(Collectors.toList());
     }
 
 

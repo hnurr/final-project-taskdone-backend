@@ -24,4 +24,5 @@ public class AppointmentDto {
     private String userPhoneNumber;
 
 
+
 }

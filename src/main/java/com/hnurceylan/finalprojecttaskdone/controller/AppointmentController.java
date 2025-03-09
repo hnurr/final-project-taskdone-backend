@@ -81,5 +81,34 @@ public class AppointmentController {
             return ResponseEntity.status(400).body("Error rejecting appointment: " + e.getMessage());
         }
     }
+
+
+    // Onaylı randevuları döndüren endpoint
+    @GetMapping("/approved")
+    public List<Appointment> getApprovedAppointments() {
+        return appointmentService.getApprovedAppointments();
+    }
+
+
+    // Onaylı randevuyu "tamamlandı" olarak güncelleyen endpoint
+    @PutMapping("/complete/{id}")
+    public ResponseEntity<Appointment> completeAppointment(@PathVariable Long id) {
+        // Randevuyu "tamamlandı" durumuna getiren metod
+        Appointment updatedAppointment = appointmentService.markAsCompleted(id);
+
+        // Eğer randevu bulunamazsa 404 döndürülür
+        if (updatedAppointment == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Güncellenmiş randevu döndürülür
+        return ResponseEntity.ok(updatedAppointment);
+    }
+
+    // Tamamlanmış randevuları listeleme
+    @GetMapping("/completed")
+    public List<Appointment> getCompletedAppointments() {
+        return appointmentService.getCompletedAppointments();
+    }
 }
 

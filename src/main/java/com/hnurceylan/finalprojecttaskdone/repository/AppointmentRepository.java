@@ -22,4 +22,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment,Long> {
     List<Appointment> findByUserId(Long userId);
 
     List<Appointment> findByProviderIdAndStatus(Long providerId, AppointmentStatus status);
+
+    // Onaylı randevuları döndüren metod
+    List<Appointment> findByStatus(AppointmentStatus status);
 }

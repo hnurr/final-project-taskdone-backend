@@ -97,5 +97,28 @@ public class AppointmentService {
         appointmentRepository.save(appointment);
     }
 
+    public List<Appointment> getApprovedAppointments() {
+        return appointmentRepository.findByStatus(AppointmentStatus.ONAYLANDI);
+    }
+
+    // Randevuyu "tamamlandı" durumuna getiren metod
+    public Appointment markAsCompleted(Long appointmentId) {
+        // Randevuyu ID ile buluyoruz
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElse(null);
+
+        // Eğer randevu bulunamazsa veya durum "onaylı" değilse, null döner
+        if (appointment != null && AppointmentStatus.ONAYLANDI.equals(appointment.getStatus())) {
+            appointment.setStatus(AppointmentStatus.TAMAMLANDI);  // Durumunu "tamamlandı" olarak güncelliyoruz
+            return appointmentRepository.save(appointment);  // Randevuyu kaydediyoruz
+        }
+
+        return null;  // Eğer randevu bulunamazsa ya da durumu "onaylı" değilse null döner
+    }
+
+    // Tamamlanmış randevuları getir
+    public List<Appointment> getCompletedAppointments() {
+        return appointmentRepository.findByStatus(AppointmentStatus.TAMAMLANDI);
+    }
+
 
 }
